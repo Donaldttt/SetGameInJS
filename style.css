@@ -1,0 +1,27 @@
+.body {
+    background: aquamarine;
+}
+.mainFrame {
+    position: relative;
+    background: cornflowerblue;
+    padding: 150px 200px;
+
+}
+.card {
+    background-image: url("image/frameB.png") ;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+
+    position: relative;
+
+}
+.img1 {
+    position: absolute;
+    z-index: 1;
+    margin: -50px 20px;
+}
+.img2 {
+    position: absolute;
+    z-index: 2;
+    margin: -50px 20px;
+}

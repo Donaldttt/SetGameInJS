@@ -1,27 +1,44 @@
-.body {
+body {
     background: aquamarine;
 }
-.mainFrame {
-    position: relative;
+.column {
+    display: flex;
+    flex-direction: column;
     background: cornflowerblue;
-    padding: 150px 200px;
-
+    width: 100%;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    height: 180px;
+    margin-top: 10px;
+    margin-left: 80px;
+    background: cornflowerblue;
 }
 .card {
-    background-image: url("image/frameB.png") ;
-    background-repeat: no-repeat;
-    border: 3px solid black;
 
-    position: relative;
-
+    margin-left: 10px;
+    width: 137px;
+    height: 163.5px;
+    cursor:pointer;
 }
 .img1 {
     position: absolute;
     z-index: 1;
-    margin: -50px 20px;
+    width: 137px;
+
 }
 .img2 {
-    position: absolute;
-    z-index: 2;
-    margin: -50px 20px;
+     z-index: 2;
+     position: relative;
+     width: 70px;
+ }
+.pattern {
+    margin-left: 25%;
+    margin-top: 50%;
+    margin-bottom: 50%;
+    width: 70px;
+}
+.button{
+    cursor: pointer;
 }

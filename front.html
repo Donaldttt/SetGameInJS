@@ -6,11 +6,15 @@
     <title>Title</title>
 </head>
 <body>
-<div class="mainFrame">
-    <div class="card">
-        <img class="img1" src="image/frameB.png"/>
-        <img class="img2" src="image/triangleB1.png"/>
-    </div>
+
+<a onclick="clean(),showCard()" class="button">play</a>
+<a onclick="showCard()" class="button">hint</a>
+<a onclick="shuffle()" class="button">shuffle</a>
+<p>Cards remind: <span id="cardsLeft"></span></p>
+<h1>Set Game</h1>
+<div class="column">
 </div>
+<p id="result"></p>
+<script type="text/javascript" src="setGame.js"></script>
 </body>
 </html>

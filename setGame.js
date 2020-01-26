@@ -1,59 +1,55 @@
 
-
-let numbers=[27,27,27];
-let shapes=[27,27,27];
-let shadings=[27,27,27];
-let colors=[27,27,27];
-let desk=[];
-let cardInDesk=0;
+let allCards=[];//Deck of cards
+let desk=[];//Card in the desk
 let cardSeleted=[];
+let hintTimes=0;
+let setHint=[];// Win set for current cards
 
+//This function creates 81 cards for set and shuffle them and update the cards reminded in the HTML page.
+function initialization(){
+    allCards=[];
+    for(let i=0;i<3;i++){
+        for(let j=0;j<3;j++){
+            for(let k=0;k<3;k++){
+                for(let y=0;y<3;y++){
+                    allCards.push([i,j,k,y]);
+                }
+            }
+        }
+    }
+    document.getElementsByClassName("column")[0].innerHTML="";
+    cardInDesk=0;
+    desk=[];
+    hintTimes=0;
+    shuffle();
+    showCard();
+}
 
 function shuffle(){
-    numbers=[27,27,27];
-    shapes=[27,27,27];
-    shadings=[27,27,27];
-    colors=[27,27,27];
-    document.getElementById("cardsLeft").innerText=checkCardsRemain();
+    let index=allCards.length-1;
+    let temp;
+    while(index!=0){
+        let rand=Math.floor(Math.random()*81);
+        temp=allCards[rand];
+        allCards[rand]=allCards[index];
+        allCards[index]=temp;
+        index--;
+    }
+    updateCardsRemain();
 }
-function checkCardsRemain(){
-    let amount=numbers[0]+numbers[1]+numbers[2];
-    return amount;
+
+function updateCardsRemain(){
+    document.getElementById("cardsLeft").innerText=allCards.length;
 }
 
 function RandomCardGenerator(){
-    if(checkCardsRemain()==0){
-        return null;
-    }
-    let number = Math.floor(Math.random()*3);
-    while (numbers[number]-1 < 0){
-        number = (number+1)%3;
-    }
-    numbers[number]--;
-    let shape = Math.floor(Math.random()*3);
-    while (shapes[shape]-1 < 0){
-        shape = (shape+1)%3
-    }
-    shapes[shape]--;
-    let shading = Math.floor(Math.random()*3);
-    while (shadings[shading]-1 < 0){
-        shading = (shading+1)%3
-    }
-    shadings[shading]--;
-    let color = Math.floor(Math.random()*3);
-    while (colors[color]-1 < 0){
-        color = (color+1)%3;
-    }
-    colors[color]--;
-
-    let card=[number,shape,shading,color];
-    return card;
+    return allCards.pop();
 }
 
 function WinCheck(cards){
     let win = true;
     let i = 0;
-    while(i<3){
+    while(i<4){
         let j = 0;
         let sum = 0;
         while(j<3){
@@ -71,15 +67,16 @@ function WinCheck(cards){
 }
 
 function findOneWin(){
+    let len=desk.length;
     let i=0;
-    while (i<12){
+    while (i<len){
         let j=i+1;
-        while (j<12){
+        while (j<len){
             let k=j+1;
-            while (k<12){
+            while (k<len){
                 let cards=[desk[i],desk[j],desk[k]];
                 if (WinCheck(cards)){
-                    return [i+1,j+1,k+1];
+                    return [i,j,k];
                 }
                 k++;
             }
@@ -91,21 +88,33 @@ function findOneWin(){
 }
 
 function hint(){
+    let setHint=findOneWin();
+    let win=setHint[hintTimes];
+    if(setHint==[0]){
+        window.alert("No win set");
+    }else{
+        while(cardSeleted.length>0){
+            document.getElementById(cardSeleted.pop()).style.border="";
+        }
 
+        let cardHTML=document.getElementsByClassName("card")[win];
+        selectCard.call(cardHTML,1);
+        hintTimes=(hintTimes+1)%3;
+    }
 }
 
+//deal number of cards to the desk
 function deal(number){
     let i = 0;
     while (i<number){
-        let card=RandomCardGenerator();
-        if(card==null){
+        if(allCards.length==0){
             break;
         }
+        let card=RandomCardGenerator();
         desk.push(card);
-        cardInDesk=cardInDesk+1;
-
         i++;
     }
+    return i;
 }
 
 function cardImageProducer(card){
@@ -125,65 +134,98 @@ function cardImageProducer(card){
 }
 
 function showCard(){
-    deal(12);
-    let i;
-    let len=desk.length;
-    let column=Math.floor(len/4)+1;
-    let row=4;
-    for(i=0;i<column;i++){
-        let imageRow=document.createElement("div");
-        imageRow.setAttribute("class","row");
-        let j;
-        if(i==column-1){
-            row=len%4;
-        }
-        for(j=0;j<row;j++){
-            imageRow.innerHTML+=cardImageProducer(desk[j+4*i]);
-        }
-        document.getElementsByClassName("column")[0].append(imageRow);
-    }
-    addEventLisenersForCards();
-    document.getElementById("cardsLeft").innerText=checkCardsRemain();
-}
-
-function clean(){
-    desk=[];
-    cardInDesk=0;
-    document.getElementsByClassName("column")[0].innerHTML="";
-}
-
-function selectCard(){
-    console.log(cardSeleted);
-    let card=this.getAttribute("id").split(',').map(Number);
-    if(this.style.border=="solid gold"){
-        this.style.border="";
-        cardSeleted.splice(cardSeleted.indexOf(card),1);
-    }else{
-        this.style.border="solid gold";
-        cardSeleted.push(card);
-    }
-    if(cardSeleted.length==3){
-        checkResult();
-        cardSeleted=[];
-
-        let cards=document.getElementsByClassName("card");
-        console.log(cards);
+    cleanDesk();
+    let cardsDealed=deal(12);
+    if(cardsDealed!=0){
         let i;
-        let len=cards.length
-        for(i=0;i<cards.length;i++){
-            cards[i].style.border="";
+        let len=desk.length;
+        let column=Math.floor(len/4)+1;
+        let row=4;
+        for(i=0;i<column;i++){
+            let imageRow=document.createElement("div");
+            imageRow.setAttribute("class","row");
+            if(i==column-1){
+                row=len%4;
+            }
+            let j;
+            for(j=0;j<row;j++){
+                imageRow.innerHTML+=cardImageProducer(desk[j+4*i]);
+            }
+            document.getElementsByClassName("column")[0].append(imageRow);
+        }
+        addEventLisenersForCards();
+        updateCardsRemain();
+        setHint=findOneWin();
+    }else{
+        window.alert("Desk is empty!")
+    }
+
+}
+
+function addThree(){
+    let len=desk.length;
+    let cardDealed=deal(3);
+    let imageRow=document.createElement("div");
+    imageRow.setAttribute("class","row");
+    let j;
+
+    for(j=0;j<cardDealed;j++){
+        imageRow.innerHTML+=cardImageProducer(desk[j+len-1]);
+    }
+    document.getElementsByClassName("column")[0].append(imageRow);
+    addEventLisenersForCards();
+    updateCardsRemain();
+    setHint=findOneWin();
+}
+
+function noWin(){
+    if(setHint==[0]){
+        addThree();
+    }else{
+        window.alert("There is one!")
+    }
+}
+
+function cleanDesk(){
+    desk=[];
+    cardSeleted=[];
+    document.getElementsByClassName("column")[0].innerHTML="";
+    hintTimes=0;
+}
+
+//mode: in 1 the border can not be canceled
+function selectCard(mode=0){
+    let card=this.getAttribute("id");
+    if(this.style.border=="7px solid gold"&&mode!=1){
+        this.style.border = "";
+        cardSeleted.splice(cardSeleted.indexOf(card), 1);
+    }else{
+        if(cardSeleted.length<3) {
+            this.style.border = "7px solid gold";
+            cardSeleted.push(card);
         }
     }
+    return card;
 }
 
 function checkResult(){
-    let result=WinCheck(cardSeleted);
-    if(result){
-        document.getElementById("result").innerText="Win!";
-    }else{
-        document.getElementById("result").innerText="Wrong!";
+    if(cardSeleted.length==3){
+        let cardSet=[];
+        let i=0;
+        while(i<3){
+            cardSet.push(cardSeleted[i].split(',').map(Number));
+            i++;
+        }
+        let result=WinCheck(cardSet);
+        if(result){
+            window.alert("Win!");
+            cardSeleted=[];
+            cleanDesk();
+            showCard();
+        }else{
+            window.alert("Wrong!");
+        }
     }
-
 }
 
 function addEventLisenersForCards() {
@@ -195,5 +237,5 @@ function addEventLisenersForCards() {
     }
 }
 
-document.getElementById("cardsLeft").innerText=checkCardsRemain();
+updateCardsRemain();
 

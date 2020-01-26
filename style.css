@@ -1,6 +1,9 @@
 body {
     background: aquamarine;
 }
+h1{
+    text-align: center;
+}
 .column {
     display: flex;
     flex-direction: column;
@@ -10,9 +13,7 @@ body {
 .row {
     display: flex;
     flex-direction: row;
-    height: 180px;
-    margin-top: 10px;
-    margin-left: 80px;
+    margin: 10px auto;
     background: cornflowerblue;
 }
 .card {
@@ -36,9 +37,19 @@ body {
 .pattern {
     margin-left: 25%;
     margin-top: 50%;
-    margin-bottom: 50%;
     width: 70px;
 }
 .button{
     cursor: pointer;
+    padding: 6px 12px;
+    background: chocolate;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+.cardLeft{
+    margin-left: 5px;
+    margin-top: 10px;
+    padding: 6px 12px;
+    width: 140px;
+    border: solid olivedrab;
 }

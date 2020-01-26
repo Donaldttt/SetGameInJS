@@ -7,10 +7,14 @@
 </head>
 <body>
 
-<a onclick="clean(),showCard()" class="button">play</a>
-<a onclick="showCard()" class="button">hint</a>
-<a onclick="shuffle()" class="button">shuffle</a>
-<p>Cards remind: <span id="cardsLeft"></span></p>
+<a onclick="cleanDesk(),showCard()" class="button">play</a>
+<a onclick="hint()" class="button">Hint</a>
+<a onclick="checkResult()" class="button">Submit</a>
+<a onclick="addThree()" class="button">Add three cards</a>
+<a onclick="noWin()" class="button">No win set</a>
+<a onclick="initialization()" class="button">New Game</a>
+
+<p class="cardLeft">Cards remind: <span id="cardsLeft"></span></p>
 <h1>Set Game</h1>
 <div class="column">
 </div>

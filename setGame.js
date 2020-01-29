@@ -1,6 +1,6 @@
 
 let allCards=[];//Deck of cards
-let desk=[];//Card in the desk
+let table=[];//Card in the desk
 let cardSeleted=[];
 let hintTimes=0;
 let setHint=[];// Win set for current cards
@@ -19,12 +19,12 @@ function initialization(){
     }
     document.getElementsByClassName("column")[0].innerHTML="";
     cardInDesk=0;
-    desk=[];
+    table=[];
     hintTimes=0;
     shuffle();
-    showCard();
 }
 
+//Shuffle all the cards
 function shuffle(){
     let index=allCards.length-1;
     let temp;
@@ -35,7 +35,6 @@ function shuffle(){
         allCards[index]=temp;
         index--;
     }
-    updateCardsRemain();
 }
 
 function updateCardsRemain(){
@@ -63,18 +62,17 @@ function WinCheck(cards){
         i++;
     }
     return win;
-
 }
 
 function findOneWin(){
-    let len=desk.length;
+    let len=table.length;
     let i=0;
     while (i<len){
         let j=i+1;
         while (j<len){
             let k=j+1;
             while (k<len){
-                let cards=[desk[i],desk[j],desk[k]];
+                let cards=[table[i],table[j],table[k]];
                 if (WinCheck(cards)){
                     return [i,j,k];
                 }
@@ -87,6 +85,7 @@ function findOneWin(){
     return [0];
 }
 
+
 function hint(){
     let setHint=findOneWin();
     let win=setHint[hintTimes];
@@ -98,7 +97,7 @@ function hint(){
         }
 
         let cardHTML=document.getElementsByClassName("card")[win];
-        selectCard.call(cardHTML,1);
+        HTMLSelectCard.call(cardHTML,1);
         hintTimes=(hintTimes+1)%3;
     }
 }
@@ -111,13 +110,13 @@ function deal(number){
             break;
         }
         let card=RandomCardGenerator();
-        desk.push(card);
+        table.push(card);
         i++;
     }
     return i;
 }
 
-function cardImageProducer(card){
+function HTMLCardImageProducer(card){
     let shape=['circle','triangle','worm'];
     let color=['B','R','G'];
     let cardHTML=
@@ -133,12 +132,12 @@ function cardImageProducer(card){
     return cardHTML;
 }
 
-function showCard(){
+function displayCardsOnTheTable(){
     cleanDesk();
     let cardsDealed=deal(12);
     if(cardsDealed!=0){
         let i;
-        let len=desk.length;
+        let len=table.length;
         let column=Math.floor(len/4)+1;
         let row=4;
         for(i=0;i<column;i++){
@@ -149,12 +148,11 @@ function showCard(){
             }
             let j;
             for(j=0;j<row;j++){
-                imageRow.innerHTML+=cardImageProducer(desk[j+4*i]);
+                imageRow.innerHTML+=HTMLCardImageProducer(table[j+4*i]);
             }
             document.getElementsByClassName("column")[0].append(imageRow);
         }
         addEventLisenersForCards();
-        updateCardsRemain();
         setHint=findOneWin();
     }else{
         window.alert("Desk is empty!")
@@ -163,14 +161,14 @@ function showCard(){
 }
 
 function addThree(){
-    let len=desk.length;
+    let len=table.length;
     let cardDealed=deal(3);
     let imageRow=document.createElement("div");
     imageRow.setAttribute("class","row");
     let j;
 
     for(j=0;j<cardDealed;j++){
-        imageRow.innerHTML+=cardImageProducer(desk[j+len-1]);
+        imageRow.innerHTML+=HTMLCardImageProducer(table[j+len-1]);
     }
     document.getElementsByClassName("column")[0].append(imageRow);
     addEventLisenersForCards();
@@ -179,7 +177,7 @@ function addThree(){
 }
 
 function noWin(){
-    if(setHint==[0]){
+    if(setHint.length==1){
         addThree();
     }else{
         window.alert("There is one!")
@@ -187,14 +185,14 @@ function noWin(){
 }
 
 function cleanDesk(){
-    desk=[];
+    table=[];
     cardSeleted=[];
     document.getElementsByClassName("column")[0].innerHTML="";
     hintTimes=0;
 }
 
 //mode: in 1 the border can not be canceled
-function selectCard(mode=0){
+function HTMLSelectCard(mode=0){
     let card=this.getAttribute("id");
     if(this.style.border=="7px solid gold"&&mode!=1){
         this.style.border = "";
@@ -221,7 +219,7 @@ function checkResult(){
             window.alert("Win!");
             cardSeleted=[];
             cleanDesk();
-            showCard();
+            displayCardsOnTheTable();
         }else{
             window.alert("Wrong!");
         }
@@ -233,9 +231,20 @@ function addEventLisenersForCards() {
     let len = cardClass.length;
     let i;
     for (i = 0; i < len; i++) {
-        cardClass[i].addEventListener('click', selectCard);
+        cardClass[i].addEventListener('click', HTMLSelectCard);
     }
 }
 
+function newGame(){
+    initialization();
+    displayCardsOnTheTable()
+    updateCardsRemain();
+}
+
+function next(){
+    cleanDesk();
+    displayCardsOnTheTable();
+    updateCardsRemain();
+}
 updateCardsRemain();
 

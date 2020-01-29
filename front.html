@@ -6,16 +6,16 @@
     <title>Title</title>
 </head>
 <body>
-
-<a onclick="cleanDesk(),showCard()" class="button">play</a>
-<a onclick="hint()" class="button">Hint</a>
-<a onclick="checkResult()" class="button">Submit</a>
-<a onclick="addThree()" class="button">Add three cards</a>
-<a onclick="noWin()" class="button">No win set</a>
-<a onclick="initialization()" class="button">New Game</a>
-
-<p class="cardLeft">Cards remind: <span id="cardsLeft"></span></p>
 <h1>Set Game</h1>
+<div class="buttonPanel">
+    <button onclick="next()" class="button">Next</button>
+    <button onclick="hint()" class="button">Hint</button>
+    <button onclick="checkResult()" class="button">Submit</button>
+    <button onclick="addThree()" class="button">Add three cards</button>
+    <button onclick="noWin()" class="button">No win set</button>
+    <button onclick="newGame()" class="button">New Game</button>
+    <p class="cardLeft">Cards remind: <span id="cardsLeft"></span></p>
+</div>
 <div class="column">
 </div>
 <p id="result"></p>
